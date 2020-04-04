@@ -79,5 +79,5 @@ the.plots <- function(Country, daysback, series = 1){
   } 
 }
 
-the.plots("globally",31,1)
+the.plots("globally",31)
 
