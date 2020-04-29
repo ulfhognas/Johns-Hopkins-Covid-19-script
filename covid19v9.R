@@ -21,7 +21,7 @@
 # The map does not show individual countries as time series
 # and that is why I wrote this script.
 # Contact me if you have questions or suggestions: ulf.hognas@gmail.com
-# Ulf H?gn?s
+# Ulf Högnäs
 
 cov19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", header=T)
 confirmed19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", header=T)
