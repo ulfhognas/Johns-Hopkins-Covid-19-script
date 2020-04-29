@@ -1,24 +1,27 @@
-#The main function is the.plots:
-#First slot is a country or "globally"
-#second slot is the number of days you want to go back from today
-#third slots is which series you want to see
+# The main function is the.plots:
+# options are "Country", "daysback", "series", and "bar"
+# First slot is a country or "globally", e.g. "Sweden", "US", or "United Kingdom"
+# second slot ("daysback") is the number of days you want to go back from today, e.g. 45
+# third slot ("series") is which series you want to see:
 # 1 deaths only (default)
 # 2 both deaths and confirmed cases
 # 3 confirmed cases only
-#examples:
+# fourth slot ("bar") is whether you want a bar chart for the daily counts, or not
+# default is FALSE; this gives you a line chart plus a seven point moving averge
+# examples:
 #
-#the.plots("globally",31)
-#the.plots("China",70, 2)
-#the.plots("Sweden",30)
+# the.plots("globally",45, 2)
+# the.plots("Sweden",45)
+# the.plots("US",45, bar = TRUE)
 #
-#The data come from Johns Hopkins 
-#This is their impressive map:
-#https://coronavirus.jhu.edu/map.html
+# The data come from Johns Hopkins 
+# This is their impressive map:
+# https://coronavirus.jhu.edu/map.html
 #
-#The map does not show individual countries as time series
-#and that is why I wrote this script.
-#Contact me if you have questions or suggestions: ulf.hognas@gmail.com
-#Ulf H?gn?s
+# The map does not show individual countries as time series
+# and that is why I wrote this script.
+# Contact me if you have questions or suggestions: ulf.hognas@gmail.com
+# Ulf H?gn?s
 
 cov19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", header=T)
 confirmed19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", header=T)
