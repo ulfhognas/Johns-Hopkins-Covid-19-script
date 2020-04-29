@@ -18,7 +18,8 @@
 #The map does not show individual countries as time series
 #and that is why I wrote this script.
 #Contact me if you have questions or suggestions: ulf.hognas@gmail.com
-#Ulf Högnäs
+#Ulf H?gn?s
+
 cov19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", header=T)
 confirmed19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", header=T)
 
@@ -49,35 +50,47 @@ cov19 <- rbind(cov19, totalcount("China",cov19),
                globalcount(cov19))
 
 confirmed19 <- rbind(confirmed19, totalcount("China",confirmed19), 
-               totalcount("Australia",confirmed19),
-               totalcount("Canada",confirmed19),
-               globalcount(confirmed19))
+                     totalcount("Australia",confirmed19),
+                     totalcount("Canada",confirmed19),
+                     globalcount(confirmed19))
 
-countryplot <- function(Country, daysback, somedata, type){
+countryplot <- function(Country, daysback, somedata, seriestype, bar = TRUE){
   n<-ncol(somedata)
   cumTemp <- unlist(somedata[which(somedata$Country.Region==Country & somedata$Province.State==""),(n-daysback+1):n])
   l <- length(cumTemp)
   
   newTemp <- cumTemp[-1]-cumTemp[-l]
-
+  
   
   names(newTemp) <- 2:l
-  plot(1:l, cumTemp, type = "o", ylab = type,
+  plot(1:l, cumTemp, type = "o", ylab = seriestype,
        xlab = "Days",
-       main = paste("Cumulative", type, Country))
-  barplot(newTemp,
-          main = paste("Daily", type, Country))
+       main = paste("Cumulative", seriestype, Country))
+  if (bar==TRUE){
+    barplot(newTemp,
+            main = paste("Daily", seriestype, Country))
+  } else {
+    plot(newTemp, type = "o", ylab = seriestype,
+            main = paste("Daily", seriestype, Country))
+    ma7 <- rep(0,(l-1))
+    for (i in 4:(l-4)){
+      ma7[i] <- mean(newTemp[(i-3):(i+3)]) 
+    }
+    lines(4:(l-4),ma7[4:(l-4)],lwd=2,col='navy')
+    print(length(ma7[4:(l-4)]))
+  }
 }
 
-the.plots <- function(Country, daysback, series = 1){
+the.plots <- function(Country, daysback, series = 1, bar = FALSE){
   par(mfrow=c((2-series%%2),2))
   if (series != 1){
-    countryplot(Country, daysback, confirmed19, "Confirmed") 
+    countryplot(Country, daysback, confirmed19, "Confirmed", bar) 
   } 
   if (series != 3){
-    countryplot(Country, daysback, cov19, "Deaths")  
+    countryplot(Country, daysback, cov19, "Deaths", bar)  
   } 
 }
 
-the.plots("globally",31)
-
+the.plots("globally",45, 2, bar = FALSE)
+the.plots("Sweden",45, bar = FALSE)
+the.plots("US",45, bar = FALSE)
