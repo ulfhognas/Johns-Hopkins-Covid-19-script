@@ -10,7 +10,7 @@ Options are "Country", "daysback", "series", and "bar".
 
 First slot is a country or "globally", e.g. "Sweden", "US", or "United Kingdom".  
 
-second slot ("startday") is the days you want to start from, where 1 is February 22, 2020, 2 is February 23 and so on
+second slot ("startday") is the days you want to start from, where startday=1 starts at February 22, 2020, startday=2 starts at February 23 and so on
 
 Third slot ("series") is which series you want to see:  
 1 deaths only (default)  
