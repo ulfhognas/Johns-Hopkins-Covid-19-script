@@ -1,7 +1,8 @@
 # The main function is the.plots:
-# options are "Country", "daysback", "series", and "bar"
+# options are "Country", "startday", "series", and "bar"
 # First slot is a country or "globally", e.g. "Sweden", "US", or "United Kingdom"
-# second slot ("daysback") is the number of days you want to go back from today, e.g. 45
+# second slot ("startday") is the days you want to start from, where 1 is 
+# February 22, 2020, 2 is February 23 and so on
 # third slot ("series") is which series you want to see:
 # 1 deaths only (default)
 # 2 both deaths and confirmed cases
@@ -10,9 +11,9 @@
 # default is FALSE; this gives you a line chart plus a seven point moving averge
 # examples:
 #
-# the.plots("globally",45, 2)
-# the.plots("Sweden",45)
-# the.plots("US",45, bar = TRUE)
+# the.plots("globally",1, 2)
+# the.plots("Sweden",60)
+# the.plots("US",90, bar = TRUE)
 #
 # The data come from Johns Hopkins 
 # This is their impressive map:
@@ -21,7 +22,7 @@
 # The map does not show individual countries as time series
 # and that is why I wrote this script.
 # Contact me if you have questions or suggestions: ulf.hognas@gmail.com
-# Ulf Högnäs
+# Ulf H?gn?s
 
 cov19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", header=T)
 confirmed19 <-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", header=T)
@@ -57,14 +58,16 @@ confirmed19 <- rbind(confirmed19, totalcount("China",confirmed19),
                      totalcount("Canada",confirmed19),
                      globalcount(confirmed19))
 
-countryplot <- function(Country, daysback, somedata, seriestype, bar = TRUE){
+countryplot <- function(Country, startday, somedata, seriestype, bar = TRUE){
   n<-ncol(somedata)
-  cumTemp <- unlist(somedata[which(somedata$Country.Region==Country & somedata$Province.State==""),(n-daysback+1):n])
+  cumTemp <- unlist(somedata[which(somedata$Country.Region==Country & 
+                                     somedata$Province.State==""),
+                             (startday+2):n])
   l <- length(cumTemp)
   
   newTemp <- cumTemp[-1]-cumTemp[-l]
   
-  
+  #print(newTemp)
   names(newTemp) <- 2:l
   plot(1:l, cumTemp, type = "o", ylab = seriestype,
        xlab = "Days",
@@ -73,7 +76,7 @@ countryplot <- function(Country, daysback, somedata, seriestype, bar = TRUE){
     barplot(newTemp,
             main = paste("Daily", seriestype, Country))
   } else {
-    plot(newTemp, type = "o", ylab = seriestype,
+    plot(newTemp, type = "o", ylab = seriestype, xlab = "Days",
             main = paste("Daily", seriestype, Country))
     ma7 <- rep(0,(l-1))
     for (i in 4:(l-4)){
@@ -81,19 +84,22 @@ countryplot <- function(Country, daysback, somedata, seriestype, bar = TRUE){
     }
     lines(4:(l-4),ma7[4:(l-4)],lwd=2,col='navy')
     print(length(ma7[4:(l-4)]))
+    print(tail(ma7, 10)[-c(8,9,10)])
   }
 }
 
-the.plots <- function(Country, daysback, series = 1, bar = FALSE){
+the.plots <- function(Country, startday = 1, series = 1, bar = FALSE){
   par(mfrow=c((2-series%%2),2))
   if (series != 1){
-    countryplot(Country, daysback, confirmed19, "Confirmed", bar) 
+    countryplot(Country, startday, confirmed19, "Confirmed", bar) 
   } 
   if (series != 3){
-    countryplot(Country, daysback, cov19, "Deaths", bar)  
+    countryplot(Country, startday, cov19, "Deaths", bar)  
   } 
 }
 
-the.plots("globally",45, 2, bar = FALSE)
-the.plots("Sweden",45, bar = FALSE)
-the.plots("US",45, bar = FALSE)
+the.plots("globally",1, 2, bar = FALSE)
+the.plots("US",30, 2, bar = FALSE)
+the.plots("Sweden",30, 2, bar = FALSE)
+the.plots("United Kingdom",30, 2, bar = FALSE)
+
