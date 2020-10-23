@@ -21,9 +21,9 @@ Fourth slot ("bar") is whether you want a bar chart for the daily counts, or not
 Default is FALSE; this gives you a line chart plus a seven point moving averge  
 Examples:  
 
-the.plots("globally",45, 2)  
-the.plots("Sweden",45)  
-the.plots("US",45, bar = TRUE)  
+the.plots("globally",1, 2)  
+the.plots("Sweden",30)  
+the.plots("US",60, bar = TRUE)  
 
 The data come from Johns Hopkins and this is their impressive map:  
 https://coronavirus.jhu.edu/map.html  
